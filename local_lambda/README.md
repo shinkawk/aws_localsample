@@ -1,4 +1,4 @@
-# sam-s3-lambda-app
+# local_lambda
 
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
 
@@ -31,13 +31,13 @@ To use the SAM CLI, you need the following tools.
 The SAM CLI uses an Amazon S3 bucket to store your application's deployment artifacts. If you don't have a bucket suitable for this purpose, create one. Replace `BUCKET_NAME` in the commands in this section with a unique bucket name.
 
 ```bash
-sam-s3-lambda-app$ aws s3 mb s3://BUCKET_NAME
+local_lambda$ aws s3 mb s3://BUCKET_NAME
 ```
 
 To prepare the application for deployment, use the `sam package` command.
 
 ```bash
-sam-s3-lambda-app$ sam package \
+local_lambda$ sam package \
     --output-template-file packaged.yaml \
     --s3-bucket BUCKET_NAME
 ```
@@ -47,17 +47,17 @@ The SAM CLI creates deployment packages, uploads them to the S3 bucket, and crea
 To deploy the application, use the `sam deploy` command.
 
 ```bash
-sam-s3-lambda-app$ sam deploy \
+local_lambda$ sam deploy \
     --template-file packaged.yaml \
-    --stack-name sam-s3-lambda-app \
+    --stack-name local_lambda \
     --capabilities CAPABILITY_IAM
 ```
 
 After deployment is complete you can run the following command to retrieve the API Gateway Endpoint URL:
 
 ```bash
-sam-s3-lambda-app$ aws cloudformation describe-stacks \
-    --stack-name sam-s3-lambda-app \
+local_lambda$ aws cloudformation describe-stacks \
+    --stack-name local_lambda \
     --query 'Stacks[].Outputs[?OutputKey==`HelloWorldApi`]' \
     --output table
 ``` 
@@ -67,7 +67,7 @@ sam-s3-lambda-app$ aws cloudformation describe-stacks \
 Build your application with the `sam build` command.
 
 ```bash
-sam-s3-lambda-app$ sam build
+local_lambda$ sam build
 ```
 
 The SAM CLI installs dependencies defined in `hello_world/requirements.txt`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
@@ -77,14 +77,14 @@ Test a single function by invoking it directly with a test event. An event is a 
 Run functions locally and invoke them with the `sam local invoke` command.
 
 ```bash
-sam-s3-lambda-app$ sam local invoke HelloWorldFunction --event events/event.json
+local_lambda$ sam local invoke HelloWorldFunction --event events/event.json
 ```
 
 The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
 
 ```bash
-sam-s3-lambda-app$ sam local start-api
-sam-s3-lambda-app$ curl http://localhost:3000/
+local_lambda$ sam local start-api
+local_lambda$ curl http://localhost:3000/
 ```
 
 The SAM CLI reads the application template to determine the API's routes and the functions that they invoke. The `Events` property on each function's definition includes the route and method for each path.
@@ -108,7 +108,7 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-sam-s3-lambda-app$ sam logs -n HelloWorldFunction --stack-name sam-s3-lambda-app --tail
+local_lambda$ sam logs -n HelloWorldFunction --stack-name local_lambda --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
@@ -118,8 +118,8 @@ You can find more information and examples about filtering Lambda function logs 
 Tests are defined in the `tests` folder in this project. Use PIP to install the [pytest](https://docs.pytest.org/en/latest/) and run unit tests.
 
 ```bash
-sam-s3-lambda-app$ pip install pytest pytest-mock --user
-sam-s3-lambda-app$ python -m pytest tests/ -v
+local_lambda$ pip install pytest pytest-mock --user
+local_lambda$ python -m pytest tests/ -v
 ```
 
 ## Cleanup
@@ -127,8 +127,8 @@ sam-s3-lambda-app$ python -m pytest tests/ -v
 To delete the sample application and the bucket that you created, use the AWS CLI.
 
 ```bash
-sam-s3-lambda-app$ aws cloudformation delete-stack --stack-name sam-s3-lambda-app
-sam-s3-lambda-app$ aws s3 rb s3://BUCKET_NAME
+local_lambda$ aws cloudformation delete-stack --stack-name local_lambda
+local_lambda$ aws s3 rb s3://BUCKET_NAME
 ```
 
 ## Resources
